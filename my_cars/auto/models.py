@@ -47,6 +47,6 @@ class Advert(models.Model):
     price = models.IntegerField()
 
     def __str__(self):
-        return self.day + " " + self.price
+        return str(self.day) + " " + str(self.price)
 
 
