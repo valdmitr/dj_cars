@@ -11,10 +11,10 @@ from .models import Maker, AutoModel, Color, Body, Person, Advert
 
 
 class AdvertAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'maker', 'automodel', 'body', 'color', 'ad_user', 'year', 'day', 'price')
+    list_display = ('__str__', 'get_maker', 'automodel', 'body', 'color', 'ad_user', 'year', 'day', 'price')
     list_filter = ['day']
     # search_fields = ['maker', 'automodel']
-    search_fields = ['price']
+    # search_fields = ['get_maker']
 
 
 admin.site.register(Body)

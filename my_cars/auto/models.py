@@ -3,6 +3,7 @@ from django.db import models
 class Maker(models.Model):
     name = models.CharField(max_length=20)
 
+
     def __str__(self):
         return self.name
 
@@ -52,7 +53,11 @@ class Advert(models.Model):
     day = models.DateField('advert day')
     price = models.IntegerField()
 
-    maker.admin_order_field = 'maker'
+    # class Meta:
+    #     ordering = ['maker']
+    def get_maker(self):
+        return  self.maker
+    get_maker.admin_order_field = 'maker'
 
     def __str__(self):
         return str(self.day) + " " + str(self.price)
