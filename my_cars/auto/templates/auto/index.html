@@ -1,0 +1,19 @@
+{% extends 'auto/base.html' %}
+
+{% block content %}
+    {% if ads %}
+        <ul>
+        {% for ad in ads %}
+            <li><div class="post">
+                <div class="date"><a href="{% url 'auto:detail' ad.id %}">{{ ad.day }}</a></div>
+                <p>{{ ad.maker }}</p>
+                <p>{{ ad.automodel }}</p>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No cars are available.</p>
+    {% endif %}
+
+{% endblock %}
