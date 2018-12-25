@@ -53,11 +53,16 @@ class Advert(models.Model):
     day = models.DateField('advert day')
     price = models.IntegerField()
 
-    # class Meta:
-    #     ordering = ['maker']
+
     def get_maker(self):
         return  self.maker
-    get_maker.admin_order_field = 'maker'
+    get_maker.admin_order_field = 'maker__name'
+
+    def get_model(self):
+        return  self.automodel
+    get_model.admin_order_field = 'automodel__name'
+
+
 
     def __str__(self):
         return str(self.day) + " " + str(self.price)
