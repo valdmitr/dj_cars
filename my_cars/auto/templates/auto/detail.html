@@ -1,0 +1,18 @@
+{% extends 'auto/base.html' %}
+
+{% block content %}
+    <div class="post">
+        <div class="date">
+                {{ ad.day }} {{  ad.ad_user  }}
+        </div>
+        {% if user.is_authenticated %}
+            <a class="btn btn-default" href="{% url 'auto:edit' pk=ad.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        {% endif %}
+        <h1>Марка: {{ ad.maker }}</h1>
+        <p>Модель: {{ ad.automodel }} <br/>
+           Тип кузова: {{ ad.body }}
+        </p>
+
+
+    </div>
+{% endblock %}

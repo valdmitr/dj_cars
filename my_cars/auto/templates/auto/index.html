@@ -5,7 +5,7 @@
         <ul>
         {% for ad in ads %}
             <li><div class="post">
-                <div class="date"><a href="{% url 'auto:detail' ad.id %}">{{ ad.day }}</a></div>
+                <div class="date"><a href="{% url 'auto:detail' pk=ad.pk %}">{{ ad.day }} {{  ad.ad_user  }}</a></div>
                 <p>{{ ad.maker }}</p>
                 <p>{{ ad.automodel }}</p>
                 </div>

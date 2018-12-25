@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .models import Maker, AutoModel, Color, Body, Person, Advert, MakerAndModel
 
@@ -9,8 +9,9 @@ def index(request):
     return render(request, 'auto/index.html', {'ads':ads})
 
 
-def detail(request):
-    return "Hi!"
+def detail(request, pk):
+    ad = get_object_or_404(Advert, pk=pk)
+    return render(request, 'auto/detail.html', {'ad':ad})
 
 def edit(request):
     return "edit this one"
