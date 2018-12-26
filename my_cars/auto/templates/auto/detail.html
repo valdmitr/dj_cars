@@ -5,12 +5,12 @@
         <div class="date">
                 {{ ad.day }} {{  ad.ad_user  }}
         </div>
-        {% if user.is_authenticated %}
-            <a class="btn btn-default" href="{% url 'auto:edit' pk=ad.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-        {% endif %}
         <h1>Марка: {{ ad.maker }}</h1>
         <p>Модель: {{ ad.automodel }} <br/>
-           Тип кузова: {{ ad.body }}
+           Тип кузова: {{ ad.body }} <br/>
+            Цвет кузова: {{ ad.color }} <br/>
+            Год выпуска: {{ad.year}} <br/>
+            Цена: {{ad.price}}
         </p>
 
 

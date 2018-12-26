@@ -44,14 +44,24 @@ class Person(models.Model):
 
 
 class Advert(models.Model):
-    maker = models.ForeignKey(Maker, on_delete=models.CASCADE, verbose_name='Бренд')
-    automodel = models.ForeignKey(AutoModel, on_delete=models.CASCADE, verbose_name='Модель машины')
-    body = models.ForeignKey(Body, on_delete=models.CASCADE, verbose_name='Тип кузова')
-    color = models.ForeignKey(Color, on_delete=models.CASCADE, verbose_name='Цвет кузова')
-    ad_user = models.ForeignKey(Person, on_delete=models.CASCADE, verbose_name='Пользователь')
+    maker = models.ForeignKey(
+        Maker, on_delete=models.CASCADE, verbose_name='Бренд'
+    )
+    automodel = models.ForeignKey(AutoModel, on_delete=models.CASCADE,
+                                  verbose_name='Модель машины')
+    body = models.ForeignKey(Body, on_delete=models.CASCADE,
+                             verbose_name='Тип кузова')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE,
+                              verbose_name='Цвет кузова')
+    ad_user = models.ForeignKey(Person, on_delete=models.CASCADE,
+                                verbose_name='Пользователь')
     year = models.IntegerField('Год выпуска')
     day = models.DateField('advert day')
     price = models.IntegerField()
+    pic = models.ImageField(
+        upload_to='user_pic', height_field=None, width_field=None,
+        max_length=100, blank=True, null=True
+    )
 
 
     def get_maker(self):

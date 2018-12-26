@@ -5,9 +5,10 @@
         <ul>
         {% for ad in ads %}
             <li><div class="post">
-                <div class="date"><a href="{% url 'auto:detail' pk=ad.pk %}">{{ ad.day }} {{  ad.ad_user  }}</a></div>
-                <p>{{ ad.maker }}</p>
-                <p>{{ ad.automodel }}</p>
+                <a href="{% url 'auto:detail' pk=ad.pk %}">
+                    <h2>{{ ad.day }} {{  ad.ad_user  }}</h2>
+                <p>{{ ad.maker }}: {{ ad.automodel }} .
+                Год выпуска: {{ad.year}} . Цена: {{ad.price}} . </p></a>
                 </div>
             </li>
         {% endfor %}
