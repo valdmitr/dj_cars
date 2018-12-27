@@ -5,14 +5,18 @@
         <div class="date">
                 {{ ad.day }} {{  ad.ad_user  }}
         </div>
-        <h1>Марка: {{ ad.maker }}</h1>
-        <p>Модель: {{ ad.automodel }} <br/>
+        <p>Марка: {{ ad.maker }} <br/>
+            Модель: {{ ad.automodel }} <br/>
            Тип кузова: {{ ad.body }} <br/>
             Цвет кузова: {{ ad.color }} <br/>
             Год выпуска: {{ad.year}} <br/>
             Цена: {{ad.price}}
         </p>
-
+        {% if ad.pic %}
+            <img src="{{ MEDIA_URL }}{{ ad.pic }}">
+        {% endif %}
+        <div>
+        </div>
 
     </div>
 {% endblock %}

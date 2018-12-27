@@ -59,8 +59,7 @@ class Advert(models.Model):
     day = models.DateField('advert day')
     price = models.IntegerField()
     pic = models.ImageField(
-        upload_to='user_pic', height_field=None, width_field=None,
-        max_length=100, blank=True, null=True
+        upload_to='user_pic', max_length=255, blank=True, null=True
     )
 
 

@@ -24,3 +24,8 @@ h1, h2 {
     float: right;
     margin-right: 40px;
 }
+
+.date {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16pt;
+}
