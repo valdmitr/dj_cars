@@ -1,4 +1,8 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.contrib import auth
+
+User
 
 class Maker(models.Model):
     name = models.CharField(max_length=20)
@@ -53,7 +57,7 @@ class Advert(models.Model):
                              verbose_name='Тип кузова')
     color = models.ForeignKey(Color, on_delete=models.CASCADE,
                               verbose_name='Цвет кузова')
-    ad_user = models.ForeignKey(Person, on_delete=models.CASCADE,
+    ad_user = models.ForeignKey(User, on_delete=models.CASCADE,
                                 verbose_name='Пользователь')
     year = models.IntegerField('Год выпуска')
     day = models.DateField('advert day')

@@ -6,9 +6,14 @@
         {% for ad in ads %}
             <li><div class="post">
                 <a href="{% url 'auto:detail' pk=ad.pk %}">
-                    <h2>{{ ad.day }} {{  ad.ad_user  }}</h2>
+                    {% if ad.pic %}
+                    <span class="car_img"> <img src="{{ MEDIA_URL }}{{ ad.pic }}" width="100"/></span>
+                    {% endif %}
+                <h2>{{ ad.day }} {{  ad.ad_user  }}</h2>
                 <p>{{ ad.maker }}: {{ ad.automodel }} .
-                Год выпуска: {{ad.year}} . Цена: {{ad.price}} . </p></a>
+                Год выпуска: {{ad.year}} . Цена: {{ad.price}} .
+                </p>
+                </a>
                 </div>
             </li>
         {% endfor %}

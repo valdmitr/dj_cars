@@ -17,7 +17,7 @@ h1, h2 {
 
 .post h2 {
     font-family: 'Press Start 2P', cursive;
-    font-size: 16pt;
+    font-size: 14pt;
 }
 
 .top-menu {
@@ -28,4 +28,31 @@ h1, h2 {
 .date {
     font-family: 'Press Start 2P', cursive;
     font-size: 16pt;
+}
+
+.post .car_img {
+    float: right;
+    margin-right: 230px;
+    display: table-cell;
+    vertical-align: middle;
+
+}
+
+
+
+.post p {
+
+    margin-bottom: 3em;
+}
+
+.post a {
+    color: #000000;
+    /*line-height: 200px;*/
+
+
+}
+
+.post a p {
+    border-bottom: 2px solid #000000; /* Параметры линии */
+    margin-right: 150px;
 }
