@@ -1,0 +1,13 @@
+{% extends 'auto/base.html' %}
+
+{% block content %}
+
+<div>
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input class="button" type="submit" value="Зарегистрироваться">
+
+</form>
+</div>
+{% endblock %}

@@ -9,7 +9,9 @@ urlpatterns = [
     path('auto/<int:pk>/', views.detail, name='detail'),
     path('auto/<int:pk>/edit/', views.edit, name='edit'),
     path('auto/new/', views.post_new, name='post_new'),
-
+    path('auth/login/', views.login, name='login'),
+    path('auth/logout/', views.logout, name='logout'),
+    path('auth/register/', views.register, name='register'),
 ]
 
 if settings.DEBUG:

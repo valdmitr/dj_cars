@@ -1,0 +1,20 @@
+{% extends 'auto/base.html' %}
+
+{% block content %}
+
+<div>
+<form method="post">
+    {% csrf_token %}
+    <label for="username">Имя пользователя</label>
+    <input type="text", name="username" id="username">
+    <label for="password">Пароль</label>
+    <input type="text", name="password" id="password">
+    {% if login.errors %}
+        <label class="error">{{ login_error }} </label>
+    {% endif %}
+    <input class="button" type="submit" value="Войти">
+    <div > <a href="/auth/register/"> Регистрация</a></div>
+
+</form>
+</div>
+{% endblock %}
