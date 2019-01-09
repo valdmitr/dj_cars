@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib import auth
 from django.contrib.auth.forms import User, UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 from .models import Maker, AutoModel, Color, Body, Person, Advert, MakerAndModel
 from .forms import PostForm, LoginForm
@@ -10,16 +11,19 @@ from .forms import PostForm, LoginForm
 
 def index(request):
     ads = Advert.objects.filter(day__lte=timezone.now()).order_by('-day')
-    return render(request, 'auto/index.html', {'ads':ads, 'username': auth.get_user(request).username})
+    return render(request, 'auto/index.html',
+                  {'ads':ads, 'username': auth.get_user(request).username})
 
 # @transaction.atomic
 def detail(request, pk):
     # with transaction.atomic():
     #     pass
     ad = get_object_or_404(Advert, pk=pk)
-    return render(request, 'auto/detail.html', {'ad':ad, 'username': auth.get_user(request).username})
+    return render(request, 'auto/detail.html',
+                  {'ad':ad, 'username': auth.get_user(request).username})
 
 
+@login_required
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
@@ -53,12 +57,14 @@ def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = auth.authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password2'])
+            user = auth.authenticate(username=form.cleaned_data['username'],
+                                     password=form.cleaned_data['password'])
             if user is not None:
                 auth.login(request, user)
                 return redirect('/')
             else:
-                return render(request, 'auto/login.html', {'login_error': 'Пользователь не найден'})
+                return render(request, 'auto/login.html',
+                              {'login_error': 'Пользователь не найден'})
 
     else:
         return render(request, 'auto/login.html')
@@ -73,7 +79,8 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            new_user = auth.authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password2'])
+            new_user = auth.authenticate(username=form.cleaned_data['username'],
+                                         password=form.cleaned_data['password2'])
             auth.login(request, new_user)
             return redirect('/')
     else:
