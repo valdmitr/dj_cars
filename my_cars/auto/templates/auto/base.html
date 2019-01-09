@@ -13,10 +13,10 @@
  <div class="page-header">
      <ul class="right">
      {% if username %}
-        <li><a href="/auth/logout/"> Выйти {{ username }} </a></li>
+        <li class="btn btn-warning"><a href="/auth/logout/"> Выйти {{ username }} </a></li>
      {% else %}
-        <li><a href="/auth/login/"> Войти </a></li>
-         <li><a href="/auth/register/"> Регистрация</a></li>
+        <li class="btn btn-warning"><a href="/auth/login/"> Войти </a></li>
+         <li class="btn btn-warning"><a href="/auth/register/"> Регистрация</a></li>
      {% endif %}
      </ul>
 

@@ -1,14 +1,18 @@
 {% extends 'auto/base.html' %}
 
 {% block content %}
+{% load static %}
     {% if ads %}
         <ul>
         {% for ad in ads %}
             <li><div class="post">
                 <a href="{% url 'auto:detail' pk=ad.pk %}">
                     {% if ad.pic %}
-                    <span class="car_img"> <img src="{{ MEDIA_URL }}{{ ad.pic }}" width="100"/></span>
+                        <span class="car_img"> <img src="{{ MEDIA_URL }}{{ ad.pic }}" width="100"/></span>
+                    {% else %}
+                        <span class="car_img"> <img src="{% static "auto/default.png" %} " /></span>
                     {% endif %}
+
                 <h2>{{ ad.day }} {{  ad.ad_user  }}</h2>
                 <p>{{ ad.maker }}: {{ ad.automodel }} .
                 Год выпуска: {{ad.year}} . Цена: {{ad.price}} .

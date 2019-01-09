@@ -1,6 +1,7 @@
 {% extends 'auto/base.html' %}
 
 {% block content %}
+{% load static %}
     <div class="post">
         <div class="date">
                 {{ ad.day }} {{  ad.ad_user  }}
@@ -12,10 +13,12 @@
             Год выпуска: {{ad.year}} <br/>
             Цена: {{ad.price}}
         </p>
-        {% if ad.pic %}
-            <img src="{{ MEDIA_URL }}{{ ad.pic }}">
-        {% endif %}
         <div>
+        {% if ad.pic %}
+            <img src="{{ MEDIA_URL }}{{ ad.pic }}" onerror="this.src = '{% static "auto/default.png" %}';"/>
+        {% else %}
+            <img src="{% static "auto/default.png" %}"/>
+        {% endif %}
         </div>
 
     </div>

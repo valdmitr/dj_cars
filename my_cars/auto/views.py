@@ -86,3 +86,7 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'auto/register.html', {'form': form})
+
+
+def error404(request, *args, **kwargs):
+    return render(request,'auto/404.html')
