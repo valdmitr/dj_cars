@@ -15,6 +15,12 @@ h1, h2 {
 
 }
 
+.page-header li, .page-header a, .page-header li a:visited, .page-header li a:active {
+    color: #ffffff;
+    text-decoration: none;
+
+}
+
 .post h2 {
     font-family: 'Press Start 2P', cursive;
     font-size: 14pt;

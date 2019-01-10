@@ -1,7 +1,10 @@
+from unittest import TestCase
+
 from django.test import TestCase
 from django.urls import reverse
 
 from .models import Advert
+
 
 class CarsIndexViewTests(TestCase):
     def test_no_cars(self):
@@ -12,3 +15,7 @@ class CarsIndexViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No cars are available.")
         self.assertQuerysetEqual(response.context['ads'], [])
+
+
+class TestDetail(TestCase):
+    pass

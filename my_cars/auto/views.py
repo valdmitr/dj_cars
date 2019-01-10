@@ -1,9 +1,12 @@
 from django.db import transaction
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib import auth
 from django.contrib.auth.forms import User, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import requires_csrf_token
+from django.views.defaults import page_not_found
 
 from .models import Maker, AutoModel, Color, Body, Person, Advert, MakerAndModel
 from .forms import PostForm, LoginForm
@@ -88,5 +91,8 @@ def register(request):
     return render(request, 'auto/register.html', {'form': form})
 
 
-def error404(request, *args, **kwargs):
-    return render(request,'auto/404.html')
+# def error404(request, exception):
+#     # return page_not_found(request, exception, template_name='auto/404.html')
+#     return render(request,'404.html', status=404)
+    #return HttpResponseNotFound(render(request,'auto/404.html')
+
