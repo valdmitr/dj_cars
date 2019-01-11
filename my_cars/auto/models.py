@@ -65,6 +65,8 @@ class Advert(models.Model):
     pic = models.ImageField(
         upload_to='user_pic', max_length=255, blank=True, null=True
     )
+    phone = models.CharField(max_length=13, blank=True, null=True)
+    status = models.BooleanField(verbose_name="Активно ли объявление", default=True)
 
 
     def get_maker(self):

@@ -5,7 +5,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Advert
-        fields = ('maker', 'automodel', 'body', 'color', 'year', 'price', 'pic')
+        fields = ('maker', 'automodel', 'body', 'color', 'year', 'price', 'pic', 'phone', 'status')
 
 
 class LoginForm(forms.Form):

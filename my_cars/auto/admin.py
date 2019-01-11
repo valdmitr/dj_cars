@@ -11,8 +11,8 @@ class MakerAdmin(admin.ModelAdmin):
 
 
 class AdvertAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'get_maker', 'get_model', 'body', 'color', 'ad_user', 'year', 'day', 'price')
-    list_filter = ['day', 'maker', 'body', 'color']
+    list_display = ('__str__', 'get_maker', 'get_model', 'body', 'color', 'ad_user', 'year', 'day', 'price', 'status', 'phone')
+    list_filter = ['status','day', 'maker', 'body', 'color']
     search_fields = ['maker__name', 'automodel__name']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
