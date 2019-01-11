@@ -12,8 +12,14 @@
             Цвет кузова: {{ ad.color }} <br/>
             Год выпуска: {{ad.year}} <br/>
             Цена: {{ad.price}}  <br/>
+        {% if user.is_authenticated %}
             Телефон: {{ ad.phone }} <br>
-            Объявление активно? {{ ad.status }}
+        {% endif %}
+        {% if ad.status is True %}
+            Активное объявление
+        {% else %}
+            Объявление закрыто
+        {% endif %}
         </p>
         <div>
         {% if ad.pic %}

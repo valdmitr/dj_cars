@@ -1,12 +1,11 @@
 from django.db import transaction
-from django.http import HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib import auth
 from django.contrib.auth.forms import User, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import requires_csrf_token
-from django.views.defaults import page_not_found
+from django.views import generic
 
 from .models import Maker, AutoModel, Color, Body, Person, Advert, MakerAndModel
 from .forms import PostForm, LoginForm
@@ -38,7 +37,8 @@ def post_new(request):
             return redirect('auto:detail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'auto/new_post_and_edit.html', {'form': form})
+    return render(request, 'auto/new_post_and_edit.html',
+                  {'form': form,'username': auth.get_user(request).username})
 
 
 def edit(request, pk):
@@ -53,7 +53,8 @@ def edit(request, pk):
             return redirect('auto:detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'auto/new_post_and_edit.html', {'form': form})
+    return render(request, 'auto/new_post_and_edit.html',
+                  {'form': form,'username': auth.get_user(request).username})
 
 
 def login(request):
@@ -89,6 +90,18 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'auto/register.html', {'form': form})
+
+
+class MyPostsView(generic.ListView):
+    template_name = 'auto/my_posts.html'
+    context_object_name = 'ads'
+
+    def get_queryset(self):
+
+        return Advert.objects.filter(
+            ad_user=self.request.user
+        ).order_by('-day')
+
 
 
 # def error404(request, exception):

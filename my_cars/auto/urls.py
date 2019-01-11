@@ -19,6 +19,7 @@ urlpatterns = [
     path('auth/login/', views.login, name='login'),
     path('auth/logout/', views.logout, name='logout'),
     path('auth/register/', views.register, name='register'),
+    path('auto/my_posts/', views.MyPostsView.as_view(), name='my_posts'),
 ]
 
 # handler404 = 'auto.views.error404'
