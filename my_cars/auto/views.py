@@ -94,6 +94,7 @@ def register(request):
 
 class MyPostsView(generic.ListView):
     template_name = 'auto/my_posts.html'
+
     context_object_name = 'ads'
 
     def get_queryset(self):
@@ -101,6 +102,13 @@ class MyPostsView(generic.ListView):
         return Advert.objects.filter(
             ad_user=self.request.user
         ).order_by('-day')
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['username'] = auth.get_user(self.request).username
+        return context
 
 
 
