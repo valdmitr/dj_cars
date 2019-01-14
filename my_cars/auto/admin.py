@@ -20,8 +20,11 @@ class AdvertAdmin(admin.ModelAdmin):
             kwargs["queryset"] = Body.objects.order_by('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-
-
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(status=True)
     # def get_queryset(self, request):
     #     qs = super().get_queryset(request)
     #     return qs.filter().order_by('maker__name')

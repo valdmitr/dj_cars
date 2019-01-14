@@ -5,6 +5,7 @@
     {% if ads %}
         <ul>
         {% for ad in ads %}
+            {% if ad.status is True %}
             <li><div class="post">
                 <a href="{% url 'auto:detail' pk=ad.pk %}">
                     {% if ad.is_now %}
@@ -24,6 +25,7 @@
                 </a>
                 </div>
             </li>
+            {% endif %}
         {% endfor %}
         </ul>
     {% else %}
