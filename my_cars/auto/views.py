@@ -16,6 +16,7 @@ def index(request):
     return render(request, 'auto/index.html',
                   {'ads':ads, 'username': auth.get_user(request).username})
 
+
 # @transaction.atomic
 def detail(request, pk):
     # with transaction.atomic():
@@ -48,7 +49,6 @@ def edit(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.ad_user = request.user
-            post.day = timezone.now()
             post.save()
             return redirect('auto:detail', pk=post.pk)
     else:
@@ -94,22 +94,15 @@ def register(request):
 
 class MyPostsView(generic.ListView):
     template_name = 'auto/my_posts.html'
-
     context_object_name = 'ads'
 
     def get_queryset(self):
-
-        return Advert.objects.filter(
-            ad_user=self.request.user
-        ).order_by('-day')
+        return Advert.objects.filter(ad_user=self.request.user).order_by('-day')
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
         context['username'] = auth.get_user(self.request).username
         return context
-
 
 
 # def error404(request, exception):

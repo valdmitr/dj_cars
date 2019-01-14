@@ -62,3 +62,7 @@ h1, h2 {
     border-bottom: 2px solid #000000; /* Параметры линии */
     margin-right: 150px;
 }
+
+.post .edit {
+    float: right;
+}

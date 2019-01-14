@@ -16,8 +16,10 @@
             Телефон: {{ ad.phone }} <br>
         {% endif %}
         {% if ad.status is True %}
+            <img src="https://img.icons8.com/flat_round/64/000000/checkmark.png">
             Активное объявление
         {% else %}
+            <img src="https://img.icons8.com/flat_round/64/000000/delete-sign.png">
             Объявление закрыто
         {% endif %}
         </p>

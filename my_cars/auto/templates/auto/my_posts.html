@@ -5,7 +5,11 @@
 {% if ads %}
         <ul>
         {% for ad in ads %}
-            <li><div class="post">
+            <li>
+                <div class="post">
+                {% if ad.status is True %}
+                    <a class="edit" href="{% url 'auto:edit' pk=ad.pk %}"> <img src="https://img.icons8.com/material-two-tone/24/000000/edit.png"> </a>
+                {% endif %}
                 <a href="{% url 'auto:detail' pk=ad.pk %}">
                     {% if ad.pic %}
                         <span class="car_img"> <img src="{{ MEDIA_URL }}{{ ad.pic }}" width="100"/></span>
