@@ -1,3 +1,6 @@
+import datetime
+
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 from django.contrib import auth
@@ -76,6 +79,10 @@ class Advert(models.Model):
     def get_model(self):
         return  self.automodel
     get_model.admin_order_field = 'automodel__name'
+
+    def is_now(self):
+        return datetime.date.today() - datetime.timedelta(days=7) <= self.day
+
 
 
 

@@ -20,8 +20,8 @@
         </div>
     </div>
 
-    {% if login.errors %}
-        <label class="error">{{ login_error }} </label>
+    {% if login_error %}
+        <div class="error">{{ login_error }} </div>
     {% endif %}
     <input class="btn btn-success" type="submit" value="Войти">
     <div > <a href="/auth/register/" class="btn btn-secondary btn-sm"> Регистрация</a></div>

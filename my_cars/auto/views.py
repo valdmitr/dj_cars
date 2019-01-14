@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
@@ -13,6 +15,7 @@ from .forms import PostForm, LoginForm
 
 def index(request):
     ads = Advert.objects.filter(day__lte=timezone.now()).order_by('-day')
+    # new = Advert.objects.filter(day__lte=(timezone.now() - datetime.timedelta(days=7)))
     return render(request, 'auto/index.html',
                   {'ads':ads, 'username': auth.get_user(request).username})
 

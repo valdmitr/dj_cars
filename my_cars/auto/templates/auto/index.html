@@ -7,6 +7,10 @@
         {% for ad in ads %}
             <li><div class="post">
                 <a href="{% url 'auto:detail' pk=ad.pk %}">
+                    {% if ad.is_now %}
+                        <img src="https://img.icons8.com/color/48/000000/new.png">
+                    {% endif %}
+
                     {% if ad.pic %}
                         <span class="car_img"> <img src="{{ MEDIA_URL }}{{ ad.pic }}" width="100"/></span>
                     {% else %}
