@@ -43,15 +43,15 @@ class CarsIndexViewTests(TestCase):
         self.assertQuerysetEqual(response.context['ads'],
                                  ['<Advert: 2018-12-29 1>'])
 
-    def test_status_false(self):
-        """
-        If status=False, advert doesn't display.
-        """
-        create_advert(status=False)
-        response = self.client.get(reverse('auto:index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No cars are available.")
-        self.assertQuerysetEqual(response.context['ads'], [])
+    # def test_status_false(self):
+    #     """
+    #     If status=False, advert doesn't display.
+    #     """
+    #     create_advert(status=False)
+    #     response = self.client.get(reverse('auto:index'))
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertContains(response, "No cars are available.")
+    #     self.assertQuerysetEqual(response.context['ads'], [])
 
 
 #
