@@ -14,3 +14,7 @@ class LoginForm(forms.Form):
 
 
 
+class ForGroupForm(forms.ModelForm):
+    class Meta:
+        model = Advert
+        fields = ('status',)

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Maker, AutoModel, Color, Body, Person, Advert, MakerAndModel
+from .forms import ForGroupForm
 
 class OtherInline(admin.TabularInline):
     model = MakerAndModel
@@ -25,6 +26,14 @@ class AdvertAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(status=True)
+
+
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        if not request.user.is_superuser:
+            self.form = ForGroupForm
+            return self.form
+
+        return super().get_form(request, obj=None, change=False, **kwargs)
     # def get_queryset(self, request):
     #     qs = super().get_queryset(request)
     #     return qs.filter().order_by('maker__name')
