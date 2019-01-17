@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
@@ -9,31 +7,38 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import requires_csrf_token
 from django.views import generic
 
-from .models import Maker, AutoModel, Color, Body, Person, Advert, MakerAndModel
+from .models import Advert
 from .forms import PostForm, LoginForm
 
 
 def index(request):
+    """
+    Главная страница со списком объявлений
+    """
     ads = Advert.objects.filter(day__lte=timezone.now()).order_by('-day')
-    # new = Advert.objects.filter(day__lte=(timezone.now() - datetime.timedelta(days=7)))
     return render(request, 'auto/index.html',
-                  {'ads':ads, 'username': auth.get_user(request).username})
+                  {'ads': ads, 'username': auth.get_user(request).username})
 
 
 # @transaction.atomic
 def detail(request, pk):
+    """
+    Детальное описание выбранного объявления
+    """
     # with transaction.atomic():
     #     pass
     ad = get_object_or_404(Advert, pk=pk)
     return render(request, 'auto/detail.html',
-                  {'ad':ad, 'username': auth.get_user(request).username})
+                  {'ad': ad, 'username': auth.get_user(request).username})
 
 
 @login_required
 def post_new(request):
+    """
+    Создание нового поста
+    """
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
-
         if form.is_valid():
             post = form.save(commit=False)
             post.ad_user = request.user
@@ -43,10 +48,13 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'auto/new_post_and_edit.html',
-                  {'form': form,'username': auth.get_user(request).username})
+                  {'form': form, 'username': auth.get_user(request).username})
 
 
 def edit(request, pk):
+    """
+    Редактирование существующего поста
+    """
     post = get_object_or_404(Advert, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
@@ -58,10 +66,13 @@ def edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'auto/new_post_and_edit.html',
-                  {'form': form,'username': auth.get_user(request).username})
+                  {'form': form, 'username': auth.get_user(request).username})
 
 
 def login(request):
+    """
+    Авторизация пользователя
+    """
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -73,16 +84,22 @@ def login(request):
             else:
                 return render(request, 'auto/login.html',
                               {'login_error': 'Пользователь не найден'})
-
     else:
         return render(request, 'auto/login.html')
 
+
 def logout(request):
+    """
+    Разлогируем пользователя
+    """
     auth.logout(request)
     return redirect("/")
 
 
 def register(request):
+    """
+    Регистрируем пользователя
+    """
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -97,6 +114,9 @@ def register(request):
 
 
 class MyPostsView(generic.ListView):
+    """
+    Список постов пользователя
+    """
     template_name = 'auto/my_posts.html'
     context_object_name = 'ads'
 
@@ -110,7 +130,6 @@ class MyPostsView(generic.ListView):
 
 
 # def error404(request, exception):
-#     # return page_not_found(request, exception, template_name='auto/404.html')
+#    return page_not_found(request, exception, template_name='auto/404.html')
 #     return render(request,'404.html', status=404)
     #return HttpResponseNotFound(render(request,'auto/404.html')
-
