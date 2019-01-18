@@ -1,13 +1,31 @@
+import copy
 import datetime
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
+from django.core import management
 
 from .models import Advert, Maker, AutoModel, Color, Body
+from .forms import PostForm
+
+def setUpModule():
+    management.call_command('loaddata', 'data_for_test_form.json', verbosity=0)
+
+form_data = {
+    'maker': 1,
+    'automodel': 1,
+    'body': 1,
+    'color': 1,
+    'year': 2018,
+    'price': 1,
+    'phone': '+79998887766',
+
+    'status': True,
+}
 
 
-def create_advert(status):
+def create_advert():
     """
     функция для создания объявления, которое потом должна попасть в QuerySet
     """
@@ -16,12 +34,13 @@ def create_advert(status):
     body = Body.objects.create(name="седан")
     color = Color.objects.create(name="черный")
     ad_user = User.objects.create(username="Bob")
-    day = datetime.datetime.now()
+    day = '2018-12-29'
+    price = 1
 
     return Advert.objects.create(maker=maker, automodel=automodel, body=body,
                                  color=color, ad_user=ad_user, year=2010,
-                                 day=day.day, pic=None, phone="1",
-                                 price=1, status=status)
+                                 day=day, pic=None, phone="1",
+                                 price=price, status=True)
 
 
 def create_advert_min_price():
@@ -100,37 +119,59 @@ class CarsIndexViewTests(TestCase):
         """
         If status=True, advert display.
         """
-        create_advert(status=True)
+        create_advert()
         response = self.client.get(reverse('auto:index'))
         self.assertQuerysetEqual(response.context['ads'],
                                  ['<Advert: 2018-12-29 1>'])
+    #
+    # def test_min_price(self):
+    #     """
+    #     If price less than 0, advert doesn't create.
+    #     """
+    #     create_advert_min_price()
+    #     response = self.client.get(reverse('auto:index'))
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertContains(response, "No cars are available.")
+    #     self.assertQuerysetEqual(response.context['ads'], [])
+    #
+    # def test_old_year(self):
+    #     """
+    #     If year less than 1900, advert doesn't displayed.
+    #     """
+    #     create_advert_old_year()
+    #     response = self.client.get(reverse('auto:index'))
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertContains(response, "No cars are available.")
+    #     self.assertQuerysetEqual(response.context['ads'], [])
+    #
+    # def test_future_year(self):
+    #     """
+    #     If year more than this year, advert doesn't displayed.
+    #     """
+    #     create_advert_future_year()
+    #     response = self.client.get(reverse('auto:index'))
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertContains(response, "No cars are available.")
+    #     self.assertQuerysetEqual(response.context['ads'], [])
 
-    def test_min_price(self):
-        """
-        If price less than 0, advert doesn't create.
-        """
-        create_advert_min_price()
-        response = self.client.get(reverse('auto:index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No cars are available.")
-        self.assertQuerysetEqual(response.context['ads'], [])
 
-    def test_old_year(self):
-        """
-        If year less than 1900, advert doesn't displayed.
-        """
-        create_advert_old_year()
-        response = self.client.get(reverse('auto:index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No cars are available.")
-        self.assertQuerysetEqual(response.context['ads'], [])
+class AddPostTests(TestCase):
 
-    def test_future_year(self):
-        """
-        If year more than this year, advert doesn't displayed.
-        """
-        create_advert_future_year()
-        response = self.client.get(reverse('auto:index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No cars are available.")
-        self.assertQuerysetEqual(response.context['ads'], [])
+    def test_true_forms(self):
+        response = self.client.get(reverse('auto:post_new'))
+        ad_user = User.objects.create(username="Bob")
+        day = datetime.datetime.now()
+        my = copy.deepcopy(form_data)
+        my.update({'ad_user': ad_user, 'day': day })
+
+        form = PostForm(data=my)
+        form.is_valid()
+        self.assertTrue(form.is_valid())
+
+    # def test_forms(self):
+    #     response = self.client.get(reverse('auto:post_new'))
+    #     import copy
+    #     my = copy.deepcopy(form_data)
+    #     my.update({'price': -1, })
+    #     form = PostForm(data=form_data)
+    #     self.assertFalse(form.is_valid())
