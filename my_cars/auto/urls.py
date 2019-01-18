@@ -11,8 +11,8 @@ app_name = 'auto'
 
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('auto/<int:pk>/', views.detail, name='detail'),
+    path('', views.IndexView.as_view(), name='index'),
+    path('auto/<int:pk>/', views.DetailView.as_view(), name='detail'),
     path('auto/<int:pk>/edit/', views.edit, name='edit'),
     path('auto/new/', views.post_new, name='post_new'),
     path('auth/login/', views.login, name='login'),

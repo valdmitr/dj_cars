@@ -11,25 +11,37 @@ from .models import Advert
 from .forms import PostForm, LoginForm
 
 
-def index(request):
+class IndexView(generic.ListView):
     """
     Главная страница со списком объявлений
     """
-    ads = Advert.objects.filter(day__lte=timezone.now()).order_by('-day')
-    return render(request, 'auto/index.html',
-                  {'ads': ads, 'username': auth.get_user(request).username})
+    template_name = 'auto/index.html'
+    context_object_name = 'ads'
+
+    def get_queryset(self):
+        return Advert.objects.filter(day__lte=timezone.now()).order_by('-day')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['username'] = auth.get_user(self.request).username
+        return context
 
 
 # @transaction.atomic
-def detail(request, pk):
+class DetailView(generic.DetailView):
     """
     Детальное описание выбранного объявления
     """
+    model = Advert
+    template_name = 'auto/detail.html'
+    context_object_name = 'ad'
+
     # with transaction.atomic():
     #     pass
-    ad = get_object_or_404(Advert, pk=pk)
-    return render(request, 'auto/detail.html',
-                  {'ad': ad, 'username': auth.get_user(request).username})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['username'] = auth.get_user(self.request).username
+        return context
 
 
 @login_required
