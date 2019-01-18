@@ -1,86 +1,95 @@
-from unittest import TestCase
+import datetime
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-from django.utils import timezone
 
 from .models import Advert, Maker, AutoModel, Color, Body
 
 
 def create_advert(status):
+    """
+    функция для создания объявления, которое потом должна попасть в QuerySet
+    """
     maker = Maker.objects.create(name="Audi")
     automodel = AutoModel.objects.create(name="A4")
     body = Body.objects.create(name="седан")
     color = Color.objects.create(name="черный")
     ad_user = User.objects.create(username="Bob")
+    day = datetime.datetime.now()
 
-    return Advert.objects.create(maker=maker, automodel=automodel, body=body, color=color,
-                                 ad_user=ad_user, year=2010,
-                                 day='2018-12-29', pic=None, phone="1",
+    return Advert.objects.create(maker=maker, automodel=automodel, body=body,
+                                 color=color, ad_user=ad_user, year=2010,
+                                 day=day.day, pic=None, phone="1",
                                  price=1, status=status)
 
+
 def create_advert_min_price():
+    """
+    функция для создания объявления с отрицательной ценой, которое
+    не должно попасть в QuerySet
+    """
     maker = Maker.objects.create(name="Audi")
     automodel = AutoModel.objects.create(name="A4")
     body = Body.objects.create(name="седан")
     color = Color.objects.create(name="черный")
     ad_user = User.objects.create(username="Bob")
     price = -1
+    day = datetime.datetime.now()
 
-    return Advert.objects.create(maker=maker, automodel=automodel, body=body, color=color,
-                                 ad_user=ad_user, year=2010,
-                                 day='2018-12-29', pic=None, phone="1",
+    return Advert.objects.create(maker=maker, automodel=automodel, body=body,
+                                 color=color, ad_user=ad_user, year=2010,
+                                 day=day.day, pic=None, phone="1",
                                  price=price, status=True)
 
-def create_advert_zero_price():
-    maker = Maker.objects.create(name="Audi")
-    automodel = AutoModel.objects.create(name="A4")
-    body = Body.objects.create(name="седан")
-    color = Color.objects.create(name="черный")
-    ad_user = User.objects.create(username="Bob")
-    price = 0
-
-    return Advert.objects.create(maker=maker, automodel=automodel, body=body, color=color,
-                                 ad_user=ad_user, year=2010,
-                                 day='2018-12-29', pic=None, phone="1",
-                                 price=price, status=True)
 
 def create_advert_old_year():
+    """
+    функция для создания объявления с годом меньше 1900, которое
+    не должно попасть в QuerySet
+    """
     maker = Maker.objects.create(name="Audi")
     automodel = AutoModel.objects.create(name="A4")
     body = Body.objects.create(name="седан")
     color = Color.objects.create(name="черный")
     ad_user = User.objects.create(username="Bob")
+    day = datetime.datetime.now()
     price = 1
     year = 1899
 
     return Advert.objects.create(maker=maker, automodel=automodel, body=body, color=color,
                                  ad_user=ad_user, year=year,
-                                 day='2018-12-29', pic=None, phone="1",
+                                 day=day.day, pic=None, phone="1",
                                  price=price, status=True)
 
+
 def create_advert_future_year():
+    """
+    функция для создания объявления с будущим годом, которое
+    не должно попасть в QuerySet
+    """
     maker = Maker.objects.create(name="Audi")
     automodel = AutoModel.objects.create(name="A4")
     body = Body.objects.create(name="седан")
     color = Color.objects.create(name="черный")
     ad_user = User.objects.create(username="Bob")
+    day = datetime.datetime.now()
     price = 1
     year = 2100
 
     return Advert.objects.create(maker=maker, automodel=automodel, body=body, color=color,
                                  ad_user=ad_user, year=year,
-                                 day='2018-12-29', pic=None, phone="1",
+                                 day=day.day, pic=None, phone="1",
                                  price=price, status=True)
 
 
 class CarsIndexViewTests(TestCase):
-
-
+    """
+    Тестируем страницу index
+    """
     def test_no_cars(self):
         """
-        If no cars exist, an appropriate message is displayed.
+        If no cars exist, message is displayed.
         """
         response = self.client.get(reverse('auto:index'))
         self.assertEqual(response.status_code, 200)
@@ -106,16 +115,6 @@ class CarsIndexViewTests(TestCase):
         self.assertContains(response, "No cars are available.")
         self.assertQuerysetEqual(response.context['ads'], [])
 
-    def test_zero_price(self):
-        """
-        If price eq 0, advert doesn't displayed.
-        """
-        create_advert_zero_price()
-        response = self.client.get(reverse('auto:index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No cars are available.")
-        self.assertQuerysetEqual(response.context['ads'], [])
-
     def test_old_year(self):
         """
         If year less than 1900, advert doesn't displayed.
@@ -135,4 +134,3 @@ class CarsIndexViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No cars are available.")
         self.assertQuerysetEqual(response.context['ads'], [])
-
