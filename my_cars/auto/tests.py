@@ -9,8 +9,13 @@ from django.core import management
 from .models import Advert, Maker, AutoModel, Color, Body
 from .forms import PostForm
 
+
 def setUpModule():
+    """
+    переопределяем setUpModule
+    """
     management.call_command('loaddata', 'data_for_test_form.json', verbosity=0)
+
 
 form_data = {
     'maker': 1,
@@ -20,14 +25,13 @@ form_data = {
     'year': 2018,
     'price': 1,
     'phone': '+79998887766',
-
     'status': True,
 }
 
 
 def create_advert():
     """
-    функция для создания объявления, которое потом должна попасть в QuerySet
+    функция для создания объявления, которое потом должно попасть в QuerySet.
     """
     maker = Maker.objects.create(name="Audi")
     automodel = AutoModel.objects.create(name="A4")
@@ -43,68 +47,9 @@ def create_advert():
                                  price=price, status=True)
 
 
-def create_advert_min_price():
-    """
-    функция для создания объявления с отрицательной ценой, которое
-    не должно попасть в QuerySet
-    """
-    maker = Maker.objects.create(name="Audi")
-    automodel = AutoModel.objects.create(name="A4")
-    body = Body.objects.create(name="седан")
-    color = Color.objects.create(name="черный")
-    ad_user = User.objects.create(username="Bob")
-    price = -1
-    day = datetime.datetime.now()
-
-    return Advert.objects.create(maker=maker, automodel=automodel, body=body,
-                                 color=color, ad_user=ad_user, year=2010,
-                                 day=day.day, pic=None, phone="1",
-                                 price=price, status=True)
-
-
-def create_advert_old_year():
-    """
-    функция для создания объявления с годом меньше 1900, которое
-    не должно попасть в QuerySet
-    """
-    maker = Maker.objects.create(name="Audi")
-    automodel = AutoModel.objects.create(name="A4")
-    body = Body.objects.create(name="седан")
-    color = Color.objects.create(name="черный")
-    ad_user = User.objects.create(username="Bob")
-    day = datetime.datetime.now()
-    price = 1
-    year = 1899
-
-    return Advert.objects.create(maker=maker, automodel=automodel, body=body, color=color,
-                                 ad_user=ad_user, year=year,
-                                 day=day.day, pic=None, phone="1",
-                                 price=price, status=True)
-
-
-def create_advert_future_year():
-    """
-    функция для создания объявления с будущим годом, которое
-    не должно попасть в QuerySet
-    """
-    maker = Maker.objects.create(name="Audi")
-    automodel = AutoModel.objects.create(name="A4")
-    body = Body.objects.create(name="седан")
-    color = Color.objects.create(name="черный")
-    ad_user = User.objects.create(username="Bob")
-    day = datetime.datetime.now()
-    price = 1
-    year = 2100
-
-    return Advert.objects.create(maker=maker, automodel=automodel, body=body, color=color,
-                                 ad_user=ad_user, year=year,
-                                 day=day.day, pic=None, phone="1",
-                                 price=price, status=True)
-
-
 class CarsIndexViewTests(TestCase):
     """
-    Тестируем страницу index
+    Тестируем страницу index.
     """
     def test_no_cars(self):
         """
@@ -123,55 +68,58 @@ class CarsIndexViewTests(TestCase):
         response = self.client.get(reverse('auto:index'))
         self.assertQuerysetEqual(response.context['ads'],
                                  ['<Advert: 2018-12-29 1>'])
-    #
-    # def test_min_price(self):
-    #     """
-    #     If price less than 0, advert doesn't create.
-    #     """
-    #     create_advert_min_price()
-    #     response = self.client.get(reverse('auto:index'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, "No cars are available.")
-    #     self.assertQuerysetEqual(response.context['ads'], [])
-    #
-    # def test_old_year(self):
-    #     """
-    #     If year less than 1900, advert doesn't displayed.
-    #     """
-    #     create_advert_old_year()
-    #     response = self.client.get(reverse('auto:index'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, "No cars are available.")
-    #     self.assertQuerysetEqual(response.context['ads'], [])
-    #
-    # def test_future_year(self):
-    #     """
-    #     If year more than this year, advert doesn't displayed.
-    #     """
-    #     create_advert_future_year()
-    #     response = self.client.get(reverse('auto:index'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, "No cars are available.")
-    #     self.assertQuerysetEqual(response.context['ads'], [])
 
 
 class AddPostTests(TestCase):
-
+    """
+    Тест формы PostForm.
+    """
     def test_true_forms(self):
-        response = self.client.get(reverse('auto:post_new'))
+        """
+        Форма PostForm валидна.
+        """
         ad_user = User.objects.create(username="Bob")
         day = datetime.datetime.now()
-        my = copy.deepcopy(form_data)
-        my.update({'ad_user': ad_user, 'day': day })
-
-        form = PostForm(data=my)
+        my_data = copy.deepcopy(form_data)
+        my_data.update({'ad_user': ad_user, 'day': day})
+        print(my_data)
+        form = PostForm(data=my_data)
         form.is_valid()
+        print(form.errors)
         self.assertTrue(form.is_valid())
 
-    # def test_forms(self):
-    #     response = self.client.get(reverse('auto:post_new'))
-    #     import copy
-    #     my = copy.deepcopy(form_data)
-    #     my.update({'price': -1, })
-    #     form = PostForm(data=form_data)
-    #     self.assertFalse(form.is_valid())
+    def test_forms_min_price(self):
+        """
+        Если цена отрицательная, форма PostForm не валидна.
+        """
+        ad_user = User.objects.create(username="Bob")
+        day = datetime.datetime.now()
+        my_data = copy.deepcopy(form_data)
+        my_data.update({'ad_user': ad_user, 'day': day, 'price': -1})
+        form = PostForm(data=my_data)
+        form.is_valid()
+        self.assertFalse(form.is_valid())
+
+    def test_forms_old_year(self):
+        """
+        Если год выпуска меньше 1900, форма PostForm не валидна.
+        """
+        ad_user = User.objects.create(username="Bob")
+        day = datetime.datetime.now()
+        my_data = copy.deepcopy(form_data)
+        my_data.update({'ad_user': ad_user, 'day': day, 'year': 1899})
+        form = PostForm(data=my_data)
+        form.is_valid()
+        self.assertFalse(form.is_valid())
+
+    def test_forms_future_year(self):
+        """
+        Если год больше текущего, то форма PostForm не валидна.
+        """
+        ad_user = User.objects.create(username="Bob")
+        day = datetime.datetime.now()
+        my_data = copy.deepcopy(form_data)
+        my_data.update({'ad_user': ad_user, 'day': day, 'year': day.year + 1})
+        form = PostForm(data=my_data)
+        form.is_valid()
+        self.assertFalse(form.is_valid())
